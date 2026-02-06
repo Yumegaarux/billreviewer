@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
-import './App.css'
-import Test from '../pages/Test' 
+import './App.css';
+import Test from '../pages/Test.jsx' ;
 
 function App() {
 
@@ -10,9 +10,6 @@ function App() {
         <Test></Test>
       </BrowserRouter>
 
-      <Routes>
-        
-      </Routes>
     </>
   )
 }

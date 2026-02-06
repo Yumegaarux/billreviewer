@@ -3,13 +3,16 @@ import axios from "axios";
 
 function Test() {
     const [bills, setBills] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get("https://open-congress-api.bettergov.ph/api/bills")
+        axios.get("http://localhost/billreviewer/billreviewer/backend/api/bills.php")
             .then(res => {
             setBills(res.data.data);
             });
     }, []);
+
+    if (loading) return <p>Loading bills...</p>;
 
     return (
         <>

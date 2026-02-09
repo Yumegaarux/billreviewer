@@ -1,32 +1,38 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
 function Test() {
     const [bills, setBills] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [cursor, setCursor] = useState(null);
+    const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
+    const effectRan = useRef(false);
 
-    const fetchBills = async (cursor = null) => {
+    const fetchBills = async (offset = 0) => {
         setLoading(true);
         try {
+            console.log("Fetching with offset:", offset);
             const res = await axios.get(
-                `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB${cursor ? `&next_cursor=${cursor}` : ""}`
+                `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB&offset=${offset}`
             );
 
-            console.log(cursor);
+            console.log("API Response:", res.data);
+            console.log("Bills count:", res.data.data?.length);
+            console.log("Has more:", res.data.pagination?.has_more);
 
-            // prev is basically the current state of bills before the update (also a parameter).
-            // ... spreads out the elements of an array, with ... both arrays remain flat.
+            // Check if we're getting duplicates
+            const newBills = Array.isArray(res.data.data) ? res.data.data : [];
+            console.log("New bills IDs:", newBills.map(b => b.id));
+
             setBills(prev => [
                 ...prev,
-                ...(Array.isArray(res.data.data) ? res.data.data : [])
+                ...newBills
             ]);
 
-            // store API cursor to React cursor for future use like in axios.
-            // next_cursor is used to tell where to start the next bar
-            setCursor(res.data.pagination?.next_cursor || null);
-            console.log(res.data.pagination?.next_cursor);
+            // Calculate next offset
+            const nextOffset = offset + 20;
+            setOffset(nextOffset);
+            console.log("Next offset:", nextOffset);
             setHasMore(res.data.pagination?.has_more || false);
         } catch (err) {
             console.error(err);
@@ -35,6 +41,8 @@ function Test() {
     };
 
     useEffect(() => {
+        if (effectRan.current) return;
+        effectRan.current = true;
         fetchBills();
     }, []);
 
@@ -65,7 +73,7 @@ function Test() {
             ))}
 
             {hasMore && (
-                <button onClick={() => fetchBills(cursor)}>
+                <button onClick={() => fetchBills(offset)}>
                     {loading ? "Loading... " : "Load More"}
                 </button>
             )}

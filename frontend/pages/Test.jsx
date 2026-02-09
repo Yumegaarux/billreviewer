@@ -13,6 +13,7 @@ function Test() {
         try {
             console.log("Fetching with offset:", offset);
             const res = await axios.get(
+                // Using offset based pagination because API was sending cursor=20 by default which is wrong. 
                 `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB&offset=${offset}`
             );
 
@@ -24,6 +25,8 @@ function Test() {
             const newBills = Array.isArray(res.data.data) ? res.data.data : [];
             console.log("New bills IDs:", newBills.map(b => b.id));
 
+            // prev is basically the current state of bills before the update (also a parameter).
+            // ... spreads out the elements of an array, with ... both arrays remain flat.
             setBills(prev => [
                 ...prev,
                 ...newBills
@@ -33,6 +36,8 @@ function Test() {
             const nextOffset = offset + 20;
             setOffset(nextOffset);
             console.log("Next offset:", nextOffset);
+
+            // API returns if this pagination still has more.
             setHasMore(res.data.pagination?.has_more || false);
         } catch (err) {
             console.error(err);

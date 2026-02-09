@@ -11,8 +11,9 @@ function Test() {
         setLoading(true);
         try {
             const res = await axios.get(
-                `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB${cursor ? `&cursor=${cursor}` : ""}`
+                `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB${cursor ? `&next_cursor=${cursor}` : ""}`
             );
+
             console.log(cursor);
 
             // prev is basically the current state of bills before the update (also a parameter).

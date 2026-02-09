@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 $limit = $_GET['limit'] ?? 20;
 $congress = $_GET['congress'] ?? 20;
 $type = $_GET['type'] ?? 'SB';
-$cursor = $_GET['cursor'] ?? null;
+$next_cursor = $_GET['next_cursor'] ?? null;
 
 $url = "https://open-congress-api.bettergov.ph/api/documents";
 $params = [
@@ -14,8 +14,8 @@ $params = [
     "type" => $type
 ];
 
-if ($cursor) {
-    $params["cursor"] = $cursor;
+if ($next_cursor) {
+    $params["next_cursor"] = $next_cursor;
 }
 
 $fullUrl = $url . "?" . http_build_query($params);

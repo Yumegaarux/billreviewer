@@ -2,8 +2,23 @@
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 
-$url = "https://open-congress-api.bettergov.ph/api/documents?limit=20&congress=20&type=SB";
+$limit = $_GET['limit'] ?? 20;
+$congress = $_GET['congress'] ?? 20;
+$type = $_GET['type'] ?? 'SB';
+$cursor = $_GET['cursor'] ?? null;
 
-$response = file_get_contents($url);
+$url = "https://open-congress-api.bettergov.ph/api/documents";
+$params = [
+    "limit" => $limit,
+    "congress" => $congress,
+    "type" => $type
+];
+
+if ($cursor) {
+    $params["cursor"] = $cursor;
+}
+
+$fullUrl = $url . "?" . http_build_query($params);
+$response = file_get_contents($fullUrl);
 
 echo $response;

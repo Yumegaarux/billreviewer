@@ -7,13 +7,34 @@ function Test() {
     const [cursor, setCursor] = useState(null);
     const [hasMore, setHasMore] = useState(true);
 
+    const fetchBills = async (cursor = null) => {
+        setLoading(true);
+        try {
+            const res = await axios.get(
+                `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB${cursor ? `&cursor=${cursor}` : ""}`
+            );
+            console.log(cursor);
+
+            // prev is basically the current state of bills before the update (also a parameter).
+            // ... spreads out the elements of an array, with ... both arrays remain flat.
+            setBills(prev => [
+                ...prev,
+                ...(Array.isArray(res.data.data) ? res.data.data : [])
+            ]);
+
+            // store API cursor to React cursor for future use like in axios.
+            // next_cursor is used to tell where to start the next bar
+            setCursor(res.data.pagination?.next_cursor || null);
+            console.log(res.data.pagination?.next_cursor);
+            setHasMore(res.data.pagination?.has_more || false);
+        } catch (err) {
+            console.error(err);
+        }
+        setLoading(false);
+    };
 
     useEffect(() => {
-        axios.get("http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB")
-            .then(res => {
-                setBills(res.data.data);
-                setLoading(false);
-            });
+        fetchBills();
     }, []);
 
     if (loading) return <p>Loading bills...</p>;
@@ -39,9 +60,14 @@ function Test() {
                     ) : (
                         <p>Authors: No Authors Listed</p>
                     )}
-                    
                 </div>
             ))}
+
+            {hasMore && (
+                <button onClick={() => fetchBills(cursor)}>
+                    {loading ? "Loading... " : "Load More"}
+                </button>
+            )}
         </>
     );
 }

@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# apis
+frontend/util/
+backend/api/api.php

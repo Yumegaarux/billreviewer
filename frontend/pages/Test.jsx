@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../util/api";
 
 function Test() {
     const [bills, setBills] = useState([]);
@@ -12,18 +13,33 @@ function Test() {
     function buttonNavigate(buttonPagination) {
         const calculatedOffset = buttonPagination * 20;
         console.log("Current Calculated Offset: ", calculatedOffset);
+
         fetchBills(calculatedOffset);
     }
 
     function createPagination() {
         let buttonPagination = [];
+
         for (let i = page ; i <= page + 10; i++) {
             buttonPagination.push(
                 <button onClick={() => buttonNavigate(i, setPage(i))}
                     key={i}>{i}
-                 </button>);
+                 </button>
+            );
         }
+
         return buttonPagination;
+    }
+
+    const search = async (keyword, filter) => {
+        try {
+            console.log("Fetched Keyword: ", keyword);
+            const res = await axios.get(
+                `${API_BASE_URL}?${filter}=${offset}`
+            )
+        } catch (err) {
+            console.log(err);
+        }    
     }
 
     const fetchBills = async (offset = 0) => {
@@ -32,7 +48,7 @@ function Test() {
             console.log("Fetching with offset:", offset);
             const res = await axios.get(
                 // Using offset based pagination because API was sending cursor=20 by default which is wrong. 
-                `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB&offset=${offset}`
+                `${API_BASE_URL}?offset=${offset}`
             );  
 
             // DEBUG
@@ -49,7 +65,6 @@ function Test() {
             setBills(newBills);
             // Calculate next offset
             setOffset(offset);
-
             // API returns if this pagination still has more.
             setHasMore(res.data.pagination?.has_more || false);
         } catch (err) {
@@ -68,6 +83,7 @@ function Test() {
 
     return (
         <>
+            {/* <input type="text" value="gago"onChange={search()}></input> */}
             {bills.map(bill => (
                 <div key={bill.id} className="">
                     <h2>Bill Title: {bill.long_title || "No Available Title."}</h2>

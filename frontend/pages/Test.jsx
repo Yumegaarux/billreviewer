@@ -3,10 +3,26 @@ import axios from "axios";
 
 function Test() {
     const [bills, setBills] = useState([]);
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const effectRan = useRef(false);
+
+    function buttonNavigate(buttonPagination) {
+        fetchBills()
+    }
+
+    function createPagination() {
+        let i = page;
+        let buttonPagination = [];
+
+        for (i ; i <= page + 10; i++) {
+            console.log(i);
+            buttonPagination.push(<button onClickkey={i}>{i}</button>);
+        }
+        return buttonPagination;
+    }
 
     const fetchBills = async (offset = 0) => {
         setLoading(true);
@@ -31,9 +47,7 @@ function Test() {
                 ...prev,
                 ...newBills
             ]);
-
             // Calculate next offset
-            const nextOffset = offset + 20;
             setOffset(nextOffset);
             console.log("Next offset:", nextOffset);
 
@@ -55,7 +69,6 @@ function Test() {
 
     return (
         <>
-
             {bills.map(bill => (
                 <div key={bill.id} className="">
                     <h2>Bill Title: {bill.long_title || "No Available Title."}</h2>
@@ -75,12 +88,10 @@ function Test() {
                     )}
                 </div>
             ))}
-
-            {hasMore && (
-                <button onClick={() => fetchBills(offset)}>
-                    {loading ? "Loading... " : "Load More"}
-                </button>
-            )}
+            {createPagination()}
+            {/* {hasMore && (
+                
+            )}; */}
         </>
     );
 }

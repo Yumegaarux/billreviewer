@@ -10,16 +10,18 @@ function Test() {
     const effectRan = useRef(false);
 
     function buttonNavigate(buttonPagination) {
-        fetchBills()
+        const calculatedOffset = buttonPagination * 20;
+        console.log("Current Calculated Offset: ", calculatedOffset);
+        fetchBills(calculatedOffset);
     }
 
     function createPagination() {
-        let i = page;
         let buttonPagination = [];
-
-        for (i ; i <= page + 10; i++) {
-            console.log(i);
-            buttonPagination.push(<button onClickkey={i}>{i}</button>);
+        for (let i = page ; i <= page + 10; i++) {
+            buttonPagination.push(
+                <button onClick={() => buttonNavigate(i, setPage(i))}
+                    key={i}>{i}
+                 </button>);
         }
         return buttonPagination;
     }
@@ -33,6 +35,7 @@ function Test() {
                 `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB&offset=${offset}`
             );  
 
+            // DEBUG
             console.log("API Response:", res.data);
             console.log("Bills count:", res.data.data?.length);
             console.log("Has more:", res.data.pagination?.has_more);
@@ -43,13 +46,9 @@ function Test() {
 
             // prev is basically the current state of bills before the update (also a parameter).
             // ... spreads out the elements of an array, with ... both arrays remain flat.
-            setBills(prev => [
-                ...prev,
-                ...newBills
-            ]);
+            setBills(newBills);
             // Calculate next offset
-            setOffset(nextOffset);
-            console.log("Next offset:", nextOffset);
+            setOffset(offset);
 
             // API returns if this pagination still has more.
             setHasMore(res.data.pagination?.has_more || false);
@@ -88,10 +87,10 @@ function Test() {
                     )}
                 </div>
             ))}
-            {createPagination()}
-            {/* {hasMore && (
-                
-            )}; */}
+
+            {hasMore && (
+                createPagination()                
+            )}
         </>
     );
 }

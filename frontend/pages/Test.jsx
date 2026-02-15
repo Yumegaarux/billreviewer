@@ -15,7 +15,7 @@ function Test() {
             const res = await axios.get(
                 // Using offset based pagination because API was sending cursor=20 by default which is wrong. 
                 `http://localhost/billreviewer/billreviewer/backend/api/bills.php?limit=20&congress=20&type=SB&offset=${offset}`
-            );
+            );  
 
             console.log("API Response:", res.data);
             console.log("Bills count:", res.data.data?.length);
@@ -55,10 +55,9 @@ function Test() {
 
     return (
         <>
-            <h1>Hello World</h1>
 
             {bills.map(bill => (
-                <div key={bill.id}>
+                <div key={bill.id} className="">
                     <h2>Bill Title: {bill.long_title || "No Available Title."}</h2>
                     <h2>Bill No. {bill.name}</h2>
                     <h3>Date Filed: {bill.date_filed}</h3>

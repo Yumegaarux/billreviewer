@@ -8,6 +8,7 @@ function Test() {
     const [loading, setLoading] = useState(true);
     const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
+    const [filter, setFilter] = useState("");
     const effectRan = useRef(false);
 
     function buttonNavigate(buttonPagination) {
@@ -20,7 +21,7 @@ function Test() {
     function createPagination() {
         let buttonPagination = [];
 
-        for (let i = page ; i <= page + 10; i++) {
+        for (let i = page ; i <= page + 10; i++) { 
             buttonPagination.push(
                 <button onClick={() => buttonNavigate(i, setPage(i))}
                     key={i}>{i}
@@ -31,12 +32,13 @@ function Test() {
         return buttonPagination;
     }
 
-    const search = async (keyword, filter) => {
+    const handleSearch = async (event) => { // event is usually used when trying to use an 'inputs' value for it's onChange function
         try {
-            console.log("Fetched Keyword: ", keyword);
+            console.log("Fetched Keyword: ", event.target.value);
+            console.log("Filter Selected: ", filter);
             const res = await axios.get(
                 `${API_BASE_URL}?${filter}=${offset}`
-            )
+            );
         } catch (err) {
             console.log(err);
         }    
@@ -60,8 +62,6 @@ function Test() {
             const newBills = Array.isArray(res.data.data) ? res.data.data : [];
             console.log("New bills IDs:", newBills.map(b => b.id));
 
-            // prev is basically the current state of bills before the update (also a parameter).
-            // ... spreads out the elements of an array, with ... both arrays remain flat.
             setBills(newBills);
             // Calculate next offset
             setOffset(offset);
@@ -83,7 +83,19 @@ function Test() {
 
     return (
         <>
-            {/* <input type="text" value="gago"onChange={search()}></input> */}
+            <form>
+                <input type="text" onChange={handleSearch}></input>
+
+                <input type="radio" id="Title" name="filter"  onChange={() => setFilter={"Title"}}></input>
+                <label for="Title">Title</label>
+
+                <input type="radio" id="Bill Number" name="filter" onChange={() => setFilter={"name"}}></input>
+                <label for="Bill Number">Bill No.</label>
+
+                <input type="radio" id="Author" name="filter" onChange={() => setFilter={"author"}}></input>
+                <label for="Author">Author</label>
+            </form>
+            
             {bills.map(bill => (
                 <div key={bill.id} className="">
                     <h2>Bill Title: {bill.long_title || "No Available Title."}</h2>

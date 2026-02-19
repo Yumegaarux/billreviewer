@@ -34,11 +34,17 @@ function Test() {
 
     const handleSearch = async (event) => { // event is usually used when trying to use an 'inputs' value for it's onChange function
         try {
+            setLoading(true);
             console.log("Fetched Keyword: ", event.target.value);
             console.log("Filter Selected: ", filter);
             const res = await axios.get(
-                `${API_BASE_URL}?${filter}=${offset}`
+                `${API_BASE_URL}?${filter}=${event.target.value}`
             );
+            console.log(`${API_BASE_URL}?${filter}=${event.target.value}`);
+            const newBills = Array.isArray(res.data.data) ? res.data.data : [];
+            console.log("New Billz: ", newBills);
+            setBills(newBills);
+            setLoading(false);
         } catch (err) {
             console.log(err);
         }    
@@ -79,24 +85,24 @@ function Test() {
         fetchBills();
     }, []);
 
-    if (loading) return <p>Loading bills...</p>;
-
     return (
         <>
-            <form>
+            <form className="searchForm">
                 <input type="text" onChange={handleSearch}></input>
 
-                <input type="radio" id="Title" name="filter"  onChange={() => setFilter={"Title"}}></input>
+                <input type="radio" id="Title" name="filter"  onChange={() => setFilter("Title")}></input>
                 <label for="Title">Title</label>
 
-                <input type="radio" id="Bill Number" name="filter" onChange={() => setFilter={"name"}}></input>
+                <input type="radio" id="Bill Number" name="filter" onChange={() => setFilter("name")}></input>
                 <label for="Bill Number">Bill No.</label>
 
-                <input type="radio" id="Author" name="filter" onChange={() => setFilter={"author"}}></input>
+                <input type="radio" id="Author" name="filter" onChange={() => setFilter("author")}></input>
                 <label for="Author">Author</label>
             </form>
             
-            {bills.map(bill => (
+            {loading && <p>Loading Bills</p>}
+
+            {!loading && bills.map(bill => (
                 <div key={bill.id} className="">
                     <h2>Bill Title: {bill.long_title || "No Available Title."}</h2>
                     <h2>Bill No. {bill.name}</h2>

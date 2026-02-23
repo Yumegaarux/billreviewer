@@ -35,14 +35,25 @@ function Test() {
     const handleSearch = async (event) => { // event is usually used when trying to use an 'inputs' value for it's onChange function
         try {
             setLoading(true);
-            console.log("Fetched Keyword: ", event.target.value);
+
+            const keyword = event.target.value;
+
+            console.log("Fetched Keyword: ", keyword);
             console.log("Filter Selected: ", filter);
-            const res = await axios.get(
-                `${API_BASE_URL}?${filter}=${event.target.value}`
-            );
-            console.log(`${API_BASE_URL}?${filter}=${event.target.value}`);
+
+            const res = await axios.get(`${API_BASE_URL}/search/documents`, {
+                params: {
+                    q: keyword,
+                }
+            });
+
+            // 'axios' converts 'params' into query string parameters like '?filter=title&keyword='block' 
+
+            console.log("Axios Get: ", `${API_BASE_URL}/search/documents?q=${keyword}`);
+
             const newBills = Array.isArray(res.data.data) ? res.data.data : [];
             console.log("New Billz: ", newBills);
+
             setBills(newBills);
             setLoading(false);
         } catch (err) {
@@ -104,7 +115,7 @@ function Test() {
 
             {!loading && bills.map(bill => (
                 <div key={bill.id} className="">
-                    <h2>Bill Title: {bill.long_title || "No Available Title."}</h2>
+                    <h2>Bill Title: {bill.title || "No Available Title."}</h2>
                     <h2>Bill No. {bill.name}</h2>
                     <h3>Date Filed: {bill.date_filed}</h3>
                     <p>Status: {bill.status}</p>

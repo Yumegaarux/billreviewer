@@ -118,7 +118,6 @@ function Test() {
                     <h2>Bill Title: {bill.title || "No Available Title."}</h2>
                     <h2>Bill No. {bill.name}</h2>
                     <h3>Date Filed: {bill.date_filed}</h3>
-                    <p>Status: {bill.status}</p>
                     <p>Subtype: {bill.subtype}</p>
 
                     {bill.authors.length > 0 ? (
@@ -133,7 +132,7 @@ function Test() {
                 </div>
             ))}
 
-            {hasMore && (
+            {hasMore && !loading && (
                 createPagination()                
             )}
         </>

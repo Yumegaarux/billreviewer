@@ -9,6 +9,7 @@ function Test() {
     const [offset, setOffset] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [filter, setFilter] = useState("");
+    const [searchVal, setSearchVal] = useState("");
     const effectRan = useRef(false);
 
     function buttonNavigate(buttonPagination) {
@@ -32,24 +33,22 @@ function Test() {
         return buttonPagination;
     }
 
+    // async functions allow the user to do other functions until 'await' is finished.
+    // it doesn't stuck the whole system up freezing waiting for a function to finish.
     const handleSearch = async (event) => { // event is usually used when trying to use an 'inputs' value for it's onChange function
         try {
             setLoading(true);
 
-            const keyword = event.target.value;
-
-            console.log("Fetched Keyword: ", keyword);
-            console.log("Filter Selected: ", filter);
+            console.log("Fetched Keyword: ", searchVal);
 
             const res = await axios.get(`${API_BASE_URL}/search/documents`, {
                 params: {
-                    q: keyword,
+                    q: searchVal,
                 }
             });
-
             // 'axios' converts 'params' into query string parameters like '?filter=title&keyword='block' 
-
-            console.log("Axios Get: ", `${API_BASE_URL}/search/documents?q=${keyword}`);
+            console.log("Handle Search Running...");
+            console.log("Axios Get: ", `${API_BASE_URL}/search/documents?q=${searchVal}`);
 
             const newBills = Array.isArray(res.data.data) ? res.data.data : [];
             console.log("New Billz: ", newBills);
@@ -90,17 +89,24 @@ function Test() {
         setLoading(false);
     };
 
+    function clearSearch(){
+        
+    }
+
     useEffect(() => {
-        if (effectRan.current) return;
-        effectRan.current = true;
-        fetchBills();
-    }, []);
+        const delayDebounce = setTimeout(() => {
+            searchVal === "" ? fetchBills() : handleSearch(searchVal);
+        }, 425)
+
+        return () => clearTimeout(delayDebounce);
+
+    }, [searchVal]);
 
     return (
         <>
-            <form className="searchForm">
-                <input type="text" onChange={handleSearch}></input>
-
+            <button onClick={fetchBills}>Back</button>
+            <input type="text" value = {searchVal} onChange={(e) => setSearchVal(e.target.value)} className="searchBar"></input>
+{/* 
                 <input type="radio" id="Title" name="filter"  onChange={() => setFilter("Title")}></input>
                 <label for="Title">Title</label>
 
@@ -108,8 +114,7 @@ function Test() {
                 <label for="Bill Number">Bill No.</label>
 
                 <input type="radio" id="Author" name="filter" onChange={() => setFilter("author")}></input>
-                <label for="Author">Author</label>
-            </form>
+                <label for="Author">Author</label> */}
             
             {loading && <p>Loading Bills</p>}
 
@@ -132,8 +137,9 @@ function Test() {
                 </div>
             ))}
 
+            {/* Condition && Expression */}
             {hasMore && !loading && (
-                createPagination()                
+                createPagination()              
             )}
         </>
     );

@@ -59,7 +59,7 @@ function Test() {
 
     // async functions allow the user to do other functions until 'await' is finished.
     // it doesn't stuck the whole system up freezing waiting for a function to finish.
-    // event is usually used when trying to use an 'inputs' value for it's onChange function
+    // event is usually upppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppqsed when trying to use an 'inputs' value for it's onChange function
 
     const fetchBills = async (offset = 0) => {
         setLoading(true);
@@ -70,7 +70,8 @@ function Test() {
                 res = await axios.get(
                     // Using offset based pagination because API was sending cursor=20 by default which is wrong. 
                     `${API_BASE_URL}?offset=${offset}`
-                );  
+                );      
+                
             } else {
                 res = await axios.get(`${API_BASE_URL}/search/documents`, {
                     params: {

@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     watch: {
-      usePolling: true,
-      interval: 100, // optional, lower = faster updates
+      usePolling: true, // added for live updates when editing react. 
+      interval: 100, // optional, lower = faster updates.
     },
     port: 9000,
     host: '0.0.0.0',  

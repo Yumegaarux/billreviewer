@@ -13,19 +13,29 @@ function Test() {
     const [searchVal, setSearchVal] = useState("");
     const [backActive, setBackActive] = useState(false);
 
-    function buttonNavigate(buttonPagination) {
-        const calculatedOffset = (buttonPagination - 1) * 20;
-        console.log("Current Calculated Offset: ", calculatedOffset);
+    function buttonNavigate(i) {
+        const calculatedOffset = (i-1) * 20;
+        console.log("Current Calculated Offset: ", calculatedOffset); 
 
         fetchBills(calculatedOffset);
     }
+
     function createPagination() {
         console.log("Pagination Created!");
+        const totalPages = Math.ceil(total / 20); // 'ceil' - rounds up to nearest whole num.
+                                                 // ex: 1.05 -> 2.
+        const windowSize = 10;                  // 'floor' - rounds down.
+                                            
+        // Math.max picks the highest val, 1 is placed to ensure page don't go below 1.
+        const start = Math.max(1, page - Math.floor(windowSize / 2));  
+        const end = Math.min(totalPages, start + windowSize - 1);
+
+        console.log("START VALUE: ", start);
+        console.log("END VALUE: ", end);
+
         let buttonPagination = [];
-
-        const totalPages = Math.ceil(total / 20); // 20 per page
-
-        for (let i = 1; i <= totalPages; i++) {
+        
+        for (let i = start; i <= end; i++) {
             buttonPagination.push(
                 <button 
                     onClick={() => {
@@ -33,12 +43,12 @@ function Test() {
                         buttonNavigate(i);
                     }}
                     key={i}
+                    style={{ fontWeight: i === page ? 'bold' : 'normal' }} 
                 >
                     {i}
                 </button>
             );
-        }
-
+        };
         return buttonPagination;
     }
 
@@ -78,13 +88,15 @@ function Test() {
                         'offset': offset,
                     }
                 });
+
+                setPage(1);
             }
 
             // DEBUG
             console.log("API Response:", res.data);
-            console.log("Bills count:", res.data.data?.length);
+            console.log("Bills count:", res.data.data?.length); // '?' safely returns undefined if pagination is null/undefined
             console.log("Has more:", res.data.pagination?.has_more);
-
+            console.log("Total Left: ", res.data.pagination?.total);
             // Check if we're getting duplicates
             const newBills = Array.isArray(res.data.data) ? res.data.data : [];
             console.log("New bills IDs:", newBills.map(b => b.id));
@@ -94,6 +106,7 @@ function Test() {
             setOffset(offset);
             // API returns if this pagination still has more.
             setHasMore(res.data.pagination?.has_more || false);
+            setTotal(res.data.pagination?.total);
             setBackActive(false);
 
         } catch (err) {

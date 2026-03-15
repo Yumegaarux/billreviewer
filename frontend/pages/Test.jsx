@@ -7,11 +7,7 @@ function Test() {
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
-    const [offset, setOffset] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
-    const [filter, setFilter] = useState("");
     const [searchVal, setSearchVal] = useState("");
-    const [backActive, setBackActive] = useState(false);
 
     function buttonNavigate(i) {
         const calculatedOffset = (i-1) * 20;
@@ -54,10 +50,8 @@ function Test() {
 
     function handleBack() {
         console.log("handleBack active");
-        setBackActive(true);
         setLoading(true);
         setPage(1);
-        setOffset(0);
         setSearchVal("");
 
         const searchBar = document.querySelectorAll("searchBar");
@@ -103,12 +97,8 @@ function Test() {
 
             setBills(newBills);
             // Calculate next offset
-            setOffset(offset);
             // API returns if this pagination still has more.
-            setHasMore(res.data.pagination?.has_more || false);
             setTotal(res.data.pagination?.total);
-            setBackActive(false);
-
         } catch (err) {
             console.error(err);
         }

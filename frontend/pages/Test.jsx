@@ -160,7 +160,7 @@ function Test() {
             ))}
 
             {/* Condition && Expression */}
-            {hasMore && !loading && (
+            {!loading && (
                 createPagination()              
             )}
         </>

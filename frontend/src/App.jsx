@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 import './App.css';
-import Test from '../pages/Test.jsx' ;
-import Header from '../components/Header.jsx';
+import Test from './pages/Test.jsx';
+import Login from './pages/Login.jsx';
+import Header from './components/Header.jsx';
+import Sidebar from './components/Sidebar.jsx';
 
 function App() {
 
@@ -9,7 +11,12 @@ function App() {
     <>
       <BrowserRouter>
         <Header></Header>
-        <Test></Test>
+        <Sidebar></Sidebar>
+
+        <Routes>
+          <Route path="/" element={Test}/>
+          <Route path="/" element={Login}/>
+        </Routes>
       </BrowserRouter>
     </>
   )

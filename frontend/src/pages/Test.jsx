@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../util/api";
+import { API_BASE_URL } from "../../util/api";
 
 function Test() {
     const [bills, setBills] = useState([]);
@@ -96,8 +96,6 @@ function Test() {
             console.log("New bills IDs:", newBills.map(b => b.id));
 
             setBills(newBills);
-            // Calculate next offset
-            // API returns if this pagination still has more.
             setTotal(res.data.pagination?.total);
         } catch (err) {
             console.error(err);

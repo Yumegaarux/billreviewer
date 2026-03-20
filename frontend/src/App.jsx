@@ -9,15 +9,8 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
         <Header></Header>
         <Sidebar></Sidebar>
-
-        <Routes>
-          <Route path="/" element={Test}/>
-          <Route path="/" element={Login}/>
-        </Routes>
-      </BrowserRouter>
     </>
   )
 }

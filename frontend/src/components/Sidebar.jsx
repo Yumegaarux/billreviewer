@@ -1,11 +1,42 @@
-import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Home, Settings, Bell } from 'lucide-react'
 
 export default function Sidebar(){
     return(
-        <>
-            <h1>Hello World</h1>
-            <Home></Home>
-        </>
+        <nav className='flex flex-col w-16 h-screen shadow-[-4px_0px_6px_rgba(0,0,0,0.1)] p-4 space-y-6'>
+            <NavLink 
+                to="/test"
+                className={({ isActive }) => 
+                    `flex items-center justify-center p-2 rounded-lg transition-colors ${
+                    isActive ? 'text-blue-500 bg-blue-50' : 'text-gray-400 hover:text-blue-400 hover:bg-blue-50' 
+                }`
+                }
+                title="Test Page"
+            >
+                <Home size={24} />
+            </NavLink>
+            <NavLink 
+                to="/dev"
+                className={({ isActive }) => 
+                    `flex items-center justify-center p-2 rounded-lg transition-colors ${
+                    isActive ? 'text-blue-500 bg-blue-50' : 'text-gray-400 hover:text-blue-400 hover:bg-blue-50' 
+                }`
+                }
+                title="Dev Page"
+            >
+                <Settings size={24} />
+            </NavLink>
+            <NavLink 
+                to="/login"
+                className={({ isActive }) => 
+                    `flex items-center justify-center p-2 rounded-lg transition-colors ${
+                    isActive ? 'text-blue-500 bg-blue-50' : 'text-gray-400 hover:text-blue-400 hover:bg-blue-50' 
+                }`
+                }
+                title="Login Page"
+            >
+                <Bell size={24} />
+            </NavLink>
+        </nav>
     )
 }

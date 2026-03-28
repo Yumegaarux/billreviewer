@@ -40,6 +40,7 @@ function Test() {
                     }}
                     key={i}
                     style={{ fontWeight: i === page ? 'bold' : 'normal' }} 
+                    className="p-2 px-3 border border-gray-300 rounded-md ml-1 cursor-pointer hover:bg-blue-50 duration-200"
                 >
                     {i}
                 </button>
@@ -114,8 +115,13 @@ function Test() {
 
     return (
         <>
-            <button onClick={handleBack}>Back</button>
-            <input type="text" value = {searchVal} onChange={(e) => setSearchVal(e.target.value)} className="searchBar"></input>
+            <div className="flex flex-row">
+                <button className="p-1 bg-white border border-gray-200 rounded-md mr-2.5 cursor-pointer hover:bg-blue-50 duration-200" onClick={handleBack}>Back</button>
+                <input type="text" value = {searchVal} onChange={(e) => setSearchVal(e.target.value)} className="searchBar bg-white rounded-sm inset-shadow-sm border border-gray-300"></input>
+                <div className="ml-auto">
+                    {!loading && ( createPagination() )}
+                </div>
+            </div>
 {/* 
                 <input type="radio" id="Title" name="filter"  onChange={() => setFilter("Title")}></input>
                 <label for="Title">Title</label>
@@ -129,21 +135,24 @@ function Test() {
             {loading && <p>Loading Bills</p>}
 
             {!loading && bills.map(bill => (
-                <div key={bill.id} className="">
-                    <h2>Bill Title: {bill.title || "No Available Title."}</h2>
-                    <h2>Bill No. {bill.name}</h2>
-                    <h3>Date Filed: {bill.date_filed}</h3>
-                    <p>Subtype: {bill.subtype}</p>
+            <div key={bill.id} className="flex flex-col justify-between p-1 border border-gray-300 rounded-md my-2 cursor-pointer hover:bg-white duration-200">
+                    <div className="flex flex-row gap-10 p-1">
+                        <h2 className="font-medium text-3xl">{bill.title || "No Available Title."}</h2>
+                        <h2 className="text-2xl">{bill.name}</h2>
+                    </div>
+                    <div className="p-1">
+                        <h3>Date Filed: {bill.date_filed}</h3>
 
-                    {bill.authors.length > 0 ? (
-                        bill.authors.map((author) => (
-                            <div key={author.id}>
-                                <p>Authors: {author.first_name + ' ' + author.middle_name + ' ' + author.last_name}</p>
-                            </div>
-                        )) 
-                    ) : (
-                        <p>Authors: No Authors Listed</p>
-                    )}
+                        {bill.authors.length > 0 ? (
+                            bill.authors.map((author) => (
+                                <div key={author.id}>
+                                    <p>Authors: {author.first_name + ' ' + author.middle_name + ' ' + author.last_name}</p>
+                                </div>
+                            )) 
+                        ) : (
+                            <p>Authors: No Authors Listed</p>
+                        )}
+                    </div>
                 </div>
             ))}
 

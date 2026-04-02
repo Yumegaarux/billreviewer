@@ -138,7 +138,7 @@ function Test() {
             <div key={bill.id} className="flex flex-col justify-between p-1 border border-gray-300 rounded-md my-2 cursor-pointer hover:bg-white duration-200">
                     <div className="flex flex-row gap-10 p-1">
                         <h2 className="font-medium text-3xl">{bill.title || "No Available Title."}</h2>
-                        <h2 className="text-2xl">{bill.name}</h2>
+                        <h2 className="text-2xl ml-auto">{bill.name}</h2>
                     </div>
                     <div className="p-1">
                         <h3>Date Filed: {bill.date_filed}</h3>

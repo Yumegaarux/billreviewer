@@ -26,3 +26,7 @@ dist-ssr
 # apis
 frontend/util/
 backend/api/api.php
+
+vompodr
+
+.env

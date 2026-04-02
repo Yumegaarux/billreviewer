@@ -45,3 +45,15 @@ export default defineConfig({
 })
 ```
 
+Notes:
+- When database connection not working, check docker logs using:
+```bash
+  docker compose ps
+```
+- compose down -v does two things in one command:
+```bash
+  docker compose down -v
+```
+down — stops and removes your containers
+-v — also deletes the volumes attached to those containers
+(So using these when there's data inside the DB is a bit dangerous.)

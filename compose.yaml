@@ -23,6 +23,8 @@ services:
       - /app/node_modules  # Preserve node_modules inside container
 
   backend:
+    build:
+      context: ./backend # <-- points to the address of its dockerfile
     image: php:8.2-apache
     container_name: backend
     depends_on:

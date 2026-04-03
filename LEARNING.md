@@ -98,3 +98,5 @@ Notes:
 down — stops and removes your containers
 -v — also deletes the volumes attached to those containers
 (So using these when there's data inside the DB is a bit dangerous.)
+- Modern Architectures usually use 1 dockerfile per service (frontend, backend).
+- The use of advanced MVC typically uses composer.

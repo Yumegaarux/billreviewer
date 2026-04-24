@@ -84,7 +84,82 @@ When you write "3306:3306" in docker-compose, you're telling Docker: "expose thi
 your machine ──► Docker container
 (same computer, two virtual networks)
 ```
+## How does the Advanced MVC Work here?
+The backend will use an advanced version of MVC instead of using a basic one. It's structured, scalable, and shows you understand separation of concerns.
 
+```bash
+index.php         ← router (handles all requests, directs traffic)
+Database.php      ← singleton DB connection
+BaseModel.php     ← reusable CRUD for all tables
+User.php          ← specific model, extends BaseModel
+```
+
+What usually happens here is: 
+
+**1. a frontend view will call do an API call**
+
+That API call will be protected quite well because it will use an endpoint in api.js (where all the API paths are usually stored). This is also where the API endpoints are going to be classified, it is classified as there is an JavaScript object (key value pairs) that specifices the value, which will later on be used in index.php.
+
+```js 
+export const API_ENDPOINTS = {
+  AUTH: '/api/auth',
+  LOGOUT: '/api/logout',
+  USERS: '/api/users',
+  RESEARCH: '/api/research',
+  RESEARCH_REVIEW: '/api/research-review',
+  RESEARCH_REVISIONS: '/api/research-revisions',
+  REVISION_COMMENTS: '/api/revision-comments',
+  REVISIONS: '/api/revisions',
+  COMMENTS: '/api/comments',
+  TEXT_COMMENTS: '/api/text-comments',
+  COMMENT_REPLIES: '/api/comment-replies',
+  TEMPLATES: '/api/templates',
+};
+
+```
+
+This is how it's usually called in the views: 
+
+```js 
+const response = await apiCall(API_ENDPOINTS.USERS);
+```
+
+**2. That API call will trigger a switch case on index.php**
+
+There will be a use case waiting in index.php that will receive the endpoint type that was used in one of the views and used the object containing endpoints. Once that is passed onto index.php, that value will be sliced:
+
+```php
+$method = $_SERVER['REQUEST_METHOD'];
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// -------------------------------------------------------------
+// SMART ROUTING FIX
+// -------------------------------------------------------------
+
+// 1. Identify the "Project Folder" (Base Path)
+// We calculate where index.php lives relative to the server root
+$scriptName = dirname($_SERVER['SCRIPT_NAME']); // Output: /researchSubReact-main/backend/public
+
+// 2. Remove that folder path from the Request URI
+// Before: /researchSubReact-main/backend/public/api/auth
+// After:  /api/auth
+if (strpos($requestUri, $scriptName) === 0) {
+    $requestUri = substr($requestUri, strlen($scriptName));
+}
+
+// 3. Clean up slashes and split
+$pathParts = explode('/', trim($requestUri, '/')); 
+
+// 4. Handle the "api" prefix
+// If the first part is "api", throw it away so we get "auth"
+if (!empty($pathParts) && $pathParts[0] === 'api') {
+    array_shift($pathParts); 
+}
+
+$endpoint = $pathParts[0] ?? '';
+$id = $pathParts[1] ?? null;
+$action = $pathParts[2] ?? null;
+```
 
 Notes:
 - When database connection not working, check docker logs using:
@@ -98,3 +173,5 @@ Notes:
 down — stops and removes your containers
 -v — also deletes the volumes attached to those containers
 (So using these when there's data inside the DB is a bit dangerous.)
+- Modern Architectures usually use 1 dockerfile per service (frontend, backend).
+- The use of advanced MVC typically uses composer.

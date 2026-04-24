@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../util/api";
+import { NavLink } from "react-router-dom";
 
 function Test() {
     const [bills, setBills] = useState([]);
@@ -135,7 +136,10 @@ function Test() {
             {loading && <p>Loading Bills</p>}
 
             {!loading && bills.map(bill => (
-            <div key={bill.id} className="flex flex-col justify-between p-1 border border-gray-300 rounded-md my-2 cursor-pointer hover:bg-white duration-200">
+            <NavLink key={bill.id} 
+                className="flex flex-col justify-between p-1 border border-gray-300 rounded-md my-2 cursor-pointer hover:bg-white duration-200"
+                to="/details"
+            >
                     <div className="flex flex-row gap-10 p-1">
                         <h2 className="font-medium text-3xl">{bill.title || "No Available Title."}</h2>
                         <h2 className="text-2xl ml-auto">{bill.name}</h2>
@@ -153,7 +157,7 @@ function Test() {
                             <p>Authors: No Authors Listed</p>
                         )}
                     </div>
-                </div>
+            </NavLink>
             ))}
 
             {/* Condition && Expression */}

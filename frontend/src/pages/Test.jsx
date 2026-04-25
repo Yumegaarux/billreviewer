@@ -136,28 +136,29 @@ function Test() {
             {loading && <p>Loading Bills</p>}
 
             {!loading && bills.map(bill => (
-            <NavLink key={bill.id} 
-                className="flex flex-col justify-between p-1 border border-gray-300 rounded-md my-2 cursor-pointer hover:bg-white duration-200"
-                to="/details"
-            >
-                    <div className="flex flex-row gap-10 p-1">
-                        <h2 className="font-medium text-3xl">{bill.title || "No Available Title."}</h2>
-                        <h2 className="text-2xl ml-auto">{bill.name}</h2>
-                    </div>
-                    <div className="p-1">
-                        <h3>Date Filed: {bill.date_filed}</h3>
+                <NavLink key={bill.id} 
+                    className="flex flex-col justify-between p-1 border border-gray-300 rounded-md my-2 cursor-pointer hover:bg-white duration-200"
+                    to={`/details/${bill.id}`}
+                    state={{ bill }} 
+                >
+                        <div className="flex flex-row gap-10 p-1">
+                            <h2 className="font-medium text-3xl">{bill.title || "No Available Title."}</h2>
+                            <h2 className="text-2xl ml-auto">{bill.name}</h2>
+                        </div>
+                        <div className="p-1">
+                            <h3>Date Filed: {bill.date_filed}</h3>
 
-                        {bill.authors.length > 0 ? (
-                            bill.authors.map((author) => (
-                                <div key={author.id}>
-                                    <p>Authors: {author.first_name + ' ' + author.middle_name + ' ' + author.last_name}</p>
-                                </div>
-                            )) 
-                        ) : (
-                            <p>Authors: No Authors Listed</p>
-                        )}
-                    </div>
-            </NavLink>
+                            {bill.authors.length > 0 ? (
+                                bill.authors.map((author) => (
+                                    <div key={author.id}>
+                                        <p>Authors: {author.first_name + ' ' + author.middle_name + ' ' + author.last_name}</p>
+                                    </div>
+                                )) 
+                            ) : (
+                                <p>Authors: No Authors Listed</p>
+                            )}
+                        </div>
+                </NavLink>
             ))}
 
             {/* Condition && Expression */}

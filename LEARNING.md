@@ -160,6 +160,61 @@ $endpoint = $pathParts[0] ?? '';
 $id = $pathParts[1] ?? null;
 $action = $pathParts[2] ?? null;
 ```
+---
+## 2 AI messages?
+
+**`role` — who is speaking**
+**`content` — what they're saying**
+
+## Why you have both system and user
+
+They serve completely different purposes:
+
+**`system`** — sets the rules and personality of the AI **before** the conversation starts. The AI never "speaks" this, it just internalized it as instructions.
+
+```jsx
+{ role: "system", content: "You are a civic education assistant..." }
+```
+This is like a job briefing. You're telling the AI *"this is who you are and how you should behave."*
+
+**`user`** — the actual request you're sending, like a real person typing a message.
+
+```jsx
+{ role: "user", content: "Explain this Philippine Senate bill..." }
+```
+This is the actual question being asked.
+
+## Analogy
+
+Think of it like hiring a customer service rep:
+
+```
+system  →  "You are a customer service rep. 
+            Be polite. Keep answers short. 
+            Only talk about our products."       ← the job briefing
+
+user    →  "Hi, how do I return my order?"      ← customer's actual message
+
+assistant → "Sure! Here's how to return..."     ← rep's response
+```
+
+## Why not just put everything in `user`?
+
+You technically could:
+
+```jsx
+{ 
+  role: "user", 
+  content: `You are a civic assistant. Explain this bill: ${bill.long_title}` 
+}
+```
+
+But separating them is better because:
+- `system` instructions are weighted more heavily by the AI
+- It's cleaner and easier to maintain
+- You can change the bill data in `user` without touching your instructions in `system`
+
+---
 
 Notes:
 - When database connection not working, check docker logs using:

@@ -17,9 +17,8 @@ export default function Details() {
                 </div>
             </div>
             <div className="flex flex-row">
-                <div className="m-1.5 bg-white border border-gray-200 rounded-md p-2">
-                    <BillSummary bill={bill}/>
-                </div>
+                <BillSummary bill={bill}>
+                </BillSummary>
                 <div className="m-1.5 bg-white border border-gray-200 rounded-md p-2">
                     <h2>Avg. Rating:</h2>
                 </div>

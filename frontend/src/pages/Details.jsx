@@ -2,10 +2,15 @@ import { useEffect, useState, useRef } from "react";
 import { useParams , useLocation } from "react-router-dom";
 
 import BillSummary from "../components/BillSummary.jsx";
+import SenatorAvatar from "../components/SenatorAvatar.jsx";
 
 export default function Details() {
     const { id } = useParams(); // uses the params that was passed on in NavLink call.
     const { state } = useLocation();
+
+    const [rating, setRating] = useState(0);
+    const [totalComments, setTotalComments] = useState(0);
+
     const bill = state?.bill;
 
     return(
@@ -19,15 +24,31 @@ export default function Details() {
             <div className="flex flex-row">
                 <BillSummary bill={bill}>
                 </BillSummary>
-                <div className="m-1.5 bg-white border border-gray-200 rounded-md p-2">
-                    <h2>Avg. Rating:</h2>
+                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2">
+                    <h2 className="text-center">Avg. Rating:</h2>
+                    <div className="flex items-center justify-center h-full">
+                        <h1>{rating}</h1>
+                    </div>
                 </div>
-                <div className="m-1.5 bg-white border border-gray-200 rounded-md p-2">
-                    <h2>Comments Received:</h2>
+                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2">
+                    <h2 className="text-center">Comments Received:</h2>
+                    <div className="flex items-center justify-center h-full">
+                        <h1>{totalComments}</h1>    
+                    </div>
                 </div>
-                <div className="m-1.5 bg-white border border-gray-200 rounded-md p-2">
+                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2">
                     <h2 className="text-center">Authors:</h2>
-                    <h2>{bill.authors_raw}</h2>
+                    <div className="flex flex-col gap-2">
+                        {bill.authors.map((author) => {
+                            const fullName = `${author.last_name}, ${author.first_name}`;
+                            return (
+                            <div key={author.id} className="flex items-center gap-2">
+                                <SenatorAvatar name={fullName} />
+                                <span>{author.first_name} {author.last_name}</span>
+                            </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </div>

@@ -55,7 +55,7 @@ export default function BillSummary({ bill }) {
   };
 
   return (
-    <div className="m-1.5 p-4 bg-white border border-gray-200 rounded-md">
+    <div className="m-1.5 p-4 w-2/4 h-52 bg-white border border-gray-200 rounded-md">
       <div className="flex items-center gap-2 mb-3">
         <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded-full">
           AI SUMMARY
@@ -87,7 +87,7 @@ export default function BillSummary({ bill }) {
       <button
         onClick={generate}
         disabled={loading | generated}
-        className="mt-3 bg-blue-500 text-white text-sm px-4 py-2 rounded-md 
+        className="mt-3 bg-blue-500 text-white text-sm px-4 py-2 rounded-md cursor-pointer
                    hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed"
       >
         {loading ? "Generating..." : "Explain this bill"}

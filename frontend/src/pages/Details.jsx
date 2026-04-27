@@ -42,7 +42,7 @@ export default function Details() {
                         {bill.authors.map((author) => {
                             const fullName = `${author.last_name}, ${author.first_name}`;
                             return (
-                            <div key={author.id} className="flex items-center gap-2">
+                            <div key={author.id} className="flex items-center justify-center gap-2">
                                 <SenatorAvatar name={fullName} />
                                 <span>{author.first_name} {author.last_name}</span>
                             </div>

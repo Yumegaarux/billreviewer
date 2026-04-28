@@ -3,6 +3,7 @@ import { useParams , useLocation } from "react-router-dom";
 
 import BillSummary from "../components/BillSummary.jsx";
 import SenatorAvatar from "../components/SenatorAvatar.jsx";
+import { MessageSquare, Star } from "lucide-react";
 
 export default function Details() {
     const { id } = useParams(); // uses the params that was passed on in NavLink call.
@@ -24,19 +25,21 @@ export default function Details() {
             <div className="flex flex-row">
                 <BillSummary bill={bill}>
                 </BillSummary>
-                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2">
+                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                     <h2 className="text-center">Avg. Rating:</h2>
                     <div className="flex items-center justify-center h-full">
-                        <h1>{rating}</h1>
+                        <h1 className="text-2xl">{rating}</h1>
+                        <Star size={30} fill="yellow" strokeWidth={1} color="gray"/>
                     </div>
                 </div>
-                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2">
+                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                     <h2 className="text-center">Comments Received:</h2>
                     <div className="flex items-center justify-center h-full">
-                        <h1>{totalComments}</h1>    
+                        <h1 className="text-2xl">{totalComments}</h1>   
+                        <MessageSquare size={30} fill="aqua" strokeWidth={1} color="gray"/> 
                     </div>
                 </div>
-                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2">
+                <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                     <h2 className="text-center">Authors:</h2>
                     <div className="flex flex-col gap-2">
                         {bill.authors.map((author) => {

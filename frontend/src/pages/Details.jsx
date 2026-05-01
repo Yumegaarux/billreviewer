@@ -23,8 +23,7 @@ export default function Details() {
                 </div>
             </div>
             <div className="flex flex-row">
-                <BillSummary bill={bill}>
-                </BillSummary>
+                <BillSummary bill={bill}/>
                 <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                     <h2 className="text-center">Avg. Rating:</h2>
                     <div className="flex items-center justify-center h-full">

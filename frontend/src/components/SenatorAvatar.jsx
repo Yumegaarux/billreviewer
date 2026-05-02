@@ -31,8 +31,7 @@ export default function SenatorAvatar({name}) {
         <img
             src={senatorImages[name]}
             alt={name}
-            className="w-10 h-10 rounded-full object-cover border border-gray-300"
+            className="w-10 h-10 rounded-full object-cover border border-gray-300 shrink-0"
         />
-    
     )
 }

@@ -57,7 +57,7 @@ export default function BillSummary({ bill }) {
   };
 
   return (
-    <div className="flex flex-col m-1.5 p-4 w-2/4 h-52 bg-white border border-gray-200 rounded-md pb-4" >
+    <div className="flex flex-col m-1.5 p-4 w-3/4 h-52 bg-white border border-gray-200 rounded-md pb-4" >
       <div className="flex items-center gap-2 mb-3">
         <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded-full">
           AI SUMMARY
@@ -74,6 +74,7 @@ export default function BillSummary({ bill }) {
       {summary && loading && (
         <div className="bg-gray-200 w-full h-0.5"/> 
       )}
+
       {loading && (
         <div className="space-y-2">
           {[100, 90, 95, 75].map((w, i) => (

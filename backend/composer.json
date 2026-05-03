@@ -1,0 +1,8 @@
+{
+    "name": "billreview/backend",
+    "autoload": {
+        "psr-4": {
+            "billreview\\backend\\": "./"
+        }
+    }
+}

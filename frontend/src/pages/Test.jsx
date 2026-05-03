@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../../util/api";
+import { API_BASE_URL, API_ENDPOINTS } from "../../util/api";
 import { NavLink } from "react-router-dom";
 
 function Test() {
@@ -74,11 +74,11 @@ function Test() {
             if (searchVal === '') {
                 res = await axios.get(
                     // Using offset based pagination because API was sending cursor=20 by default which is wrong. 
-                    `${API_BASE_URL}?offset=${offset}`
+                    `${API_BASE_URL}${API_ENDPOINTS.BILLS}?offset=${offset}`
                 );      
                 
             } else {
-                res = await axios.get(`${API_BASE_URL}/search/documents`, {
+                res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.BILLS}/search/documents`, {
                     params: {
                         q: searchVal,
                         'offset': offset,
@@ -87,7 +87,7 @@ function Test() {
 
                 setPage(1);
             }
-
+            console.log( `${API_BASE_URL}${API_ENDPOINTS.BILLS}?offset=${offset}`);
             // DEBUG
             console.log("API Response:", res.data);
             console.log("Bills count:", res.data.data?.length); // '?' safely returns undefined if pagination is null/undefined

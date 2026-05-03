@@ -1,6 +1,8 @@
 <?php
 
-namespace billreview\backend\database;
+namespace billreview\backend\models;
+
+use billreview\backend\database\Database;
 
 /**
  * Base Model Class

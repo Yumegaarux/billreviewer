@@ -4,6 +4,8 @@ import { useParams , useLocation } from "react-router-dom";
 import BillSummary from "../components/BillSummary.jsx";
 import SenatorAvatar from "../components/SenatorAvatar.jsx";
 import { MessageSquare, Star, User } from "lucide-react";
+import { API_BASE_URL, API_ENDPOINTS } from "../../util/api.js";
+import axios from "axios";
 
 export default function Details() {
     const { id } = useParams(); // uses the params that was passed on in NavLink call.
@@ -15,6 +17,23 @@ export default function Details() {
     const [reviews, setReviews] = useState ([]);
 
     const bill = state?.bill;
+    const billNo = bill?.name;
+
+    const handleComments = async (billid) => {
+        try{
+            const res = await axios.get(
+                `${API_BASE_URL}${API_ENDPOINTS.COMMENTS}/${billid}`
+            );
+            console.log(`${API_BASE_URL}${API_ENDPOINTS.COMMENTS}/${billid}`);
+            console.log(res);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    useEffect(() => {
+        handleComments(billNo).then(data => setReviews(data)); 
+    }, [])
 
     return(
         <div className="flex flex-col">
@@ -63,12 +82,14 @@ export default function Details() {
             
             <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                 <h1>Bill Reviews</h1>
-                {reviews.map((comments) => {
-                    <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
-                        <div>
-                            <User className="w-5 h-5 text-gray-500" />
+                {reviews.map((review) => {
+                    return(
+                        <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
+                            <div>
+                                <User className="w-5 h-5 text-gray-500" />
+                            </div>
                         </div>
-                    </div>
+                    );
                 })}
                 
             </div>

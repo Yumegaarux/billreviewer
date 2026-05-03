@@ -87,6 +87,9 @@ function Test() {
 
                 setPage(1);
             }
+            console.log("Full response:", res);
+console.log("res.data type:", typeof res.data);
+console.log("res.data:", res.data);
             console.log( `${API_BASE_URL}${API_ENDPOINTS.BILLS}?offset=${offset}`);
             // DEBUG
             console.log("API Response:", res.data);

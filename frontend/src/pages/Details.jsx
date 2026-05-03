@@ -24,10 +24,12 @@ export default function Details() {
             const res = await axios.get(
                 `${API_BASE_URL}${API_ENDPOINTS.COMMENTS}/${billid}`
             );
+            return res.data;
             console.log(`${API_BASE_URL}${API_ENDPOINTS.COMMENTS}/${billid}`);
             console.log(res);
         } catch (err) {
             console.error(err);
+            return [];
         }
     }
 

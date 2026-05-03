@@ -59,10 +59,14 @@ file_put_contents('debug.log',
     FILE_APPEND);
 try {
     switch($endpoint) {
+        case 'bills': {
+            handleBills($method);
+            break;
+        }
         case 'comment':{
             handleComments($method, $id);
             break;
-        }
+        }  
     }
 } catch (Exception $e) {
     http_response_code(500);
@@ -70,6 +74,47 @@ try {
         'error' => 'Internal server error',
         'message' => $e->getMessage()
     ]);
+}
+
+function handleBills($method){
+    if ($method == 'GET'){
+        header("Content-Type: application/json");
+        header("Access-Control-Allow-Origin: *");
+        require_once __DIR__ . '/../api/api.php';  // ← keep only this
+
+        // remove include('api.php'); ← delete this line
+
+        $congress = 20;
+        $type = 'SB'; 
+        $limit = $_GET['limit'] ?? 20;
+        $offset = $_GET['offset'] ?? 0;
+        $q = $_GET['q'] ?? '';
+
+        $api = new API();
+
+        if ($q) {
+            $params = [
+                "limit" => $limit,
+                "congress" => $congress,
+                "type" => $type,
+                "subtype" => 'SB',
+                "offset" => $offset,
+                "q" => $q,
+            ];
+            $fullUrl = $api->getURLSearch() . "?" . http_build_query($params);
+        } else {
+            $params = [
+                "limit" => $limit,
+                "congress" => $congress,
+                "type" => $type,    
+                "offset" => $offset,
+            ];
+            $fullUrl = $api->getURL() . "?" . http_build_query($params);
+        }
+
+        $response = file_get_contents($fullUrl);
+        echo $response;
+    }
 }
 
 function handleComments($method, $id){

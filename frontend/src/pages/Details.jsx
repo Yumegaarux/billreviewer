@@ -42,8 +42,10 @@ export default function Details() {
             <div className="m-1.5 bg-white border border-gray-200 rounded-md">
                 <div className="m-3">
                     <h1 className="text-2xl">{bill.long_title}</h1>
-                    <div className="flex flex-row justify-between">
-                        <h3>Filed on: {bill.date_filed}</h3>
+                    <div className="flex flex-row justify-between items-baseline">
+                        <div className="border border-gray-200 p-2 rounded-md">
+                            <h3>Filed on: {bill.date_filed}</h3>
+                        </div>
                         <div className=" border border-gray-200 p-2 rounded-md">
                             <h3 className="text-2xl">{bill.name}</h3>
                         </div>

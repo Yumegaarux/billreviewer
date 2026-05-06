@@ -123,7 +123,7 @@ function handleComments($method, $id){
     switch($method){
         case 'GET': {
             if($id){
-                $comments = $commentModel->getBillComments($id);
+                $comments = $commentModel->getBillCommentsWithUser($id);
                 echo json_encode($comments);
             } else {
                 echo json_encode([]);

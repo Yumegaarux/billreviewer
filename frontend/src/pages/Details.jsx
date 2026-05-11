@@ -54,7 +54,9 @@ export default function Details() {
 
     const handleSubmit = (e) => {
         e.preventDefault(); 
-        
+        if (!id) {
+
+        }
     };
 
     useEffect(() => {
@@ -159,7 +161,7 @@ export default function Details() {
 
                             <button
                                 type="submit"
-                                className="bg-blue-700 text-white text-sm px-4 py-2 rounded-sm hover:bg-blue-800"
+                                className="bg-blue-500 text-white text-sm px-4 py-2 rounded-sm hover:bg-blue-600 cursor-pointer"
                             >
                                 Submit
                             </button>

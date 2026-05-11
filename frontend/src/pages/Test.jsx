@@ -120,7 +120,7 @@ console.log("res.data:", res.data);
     return (
         <>
             <div className="flex flex-row">
-                <button className="p-1 bg-white border border-gray-200 rounded-md mr-2.5 cursor-pointer hover:bg-blue-50 duration-200" onClick={handleBack}>Back</button>
+                <button className="py-1 px-3 text-white bg-blue-600 rounded-md mr-2.5 cursor-pointer hover:bg-blue-700 duration-200" onClick={handleBack}>Back</button>
                 <input type="text" value = {searchVal} onChange={(e) => setSearchVal(e.target.value)} className="searchBar bg-white rounded-sm inset-shadow-sm border border-gray-300"></input>
                 <div className="ml-auto">
                     {!loading && ( createPagination() )}

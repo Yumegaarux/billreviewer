@@ -2,10 +2,13 @@ import { useEffect, useState, useRef } from "react";
 import { useParams , useLocation } from "react-router-dom";
 
 import BillSummary from "../components/BillSummary.jsx";
+import LoginModal from "../components/LoginModal.jsx";
+
 import SenatorAvatar from "../components/SenatorAvatar.jsx";
 import { MessageSquare, Star, User } from "lucide-react";
 import { API_BASE_URL, API_ENDPOINTS } from "../../util/api.js";
 import axios from "axios";
+
 
 export default function Details() {
     const { id } = useParams(); // uses the params that was passed on in NavLink call.
@@ -55,7 +58,7 @@ export default function Details() {
     const handleSubmit = (e) => {
         e.preventDefault(); 
         if (!id) {
-
+            <LoginModal></LoginModal>
         }
     };
 
@@ -162,6 +165,7 @@ export default function Details() {
                             <button
                                 type="submit"
                                 className="bg-blue-500 text-white text-sm px-4 py-2 rounded-sm hover:bg-blue-600 cursor-pointer"
+                                onClick={handleSubmit}
                             >
                                 Submit
                             </button>

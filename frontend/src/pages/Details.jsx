@@ -14,6 +14,10 @@ export default function Details() {
     const { id } = useParams(); // uses the params that was passed on in NavLink call.
     const { state } = useLocation();
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const [showLoginModal, setShowLoginModal] = useState(false);
+
     const [rating, setRating] = useState(3.2);
     const [totalComments, setTotalComments] = useState(0.5);
 
@@ -57,8 +61,14 @@ export default function Details() {
 
     const handleSubmit = (e) => {
         e.preventDefault(); 
-        if (!id) {
-            <LoginModal></LoginModal>
+
+        if (!isLoggedIn) {
+            setShowLoginModal(true);
+            return;
+        }
+
+        else {
+
         }
     };
 
@@ -113,7 +123,7 @@ export default function Details() {
                     </div>
                 </div>
             </div>
-            
+
             <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                 <h1>Bill Reviews</h1>
                 {reviews.map((review) => {
@@ -169,6 +179,8 @@ export default function Details() {
                             >
                                 Submit
                             </button>
+
+                            {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
                         </div>
                     </form>
                 </div>

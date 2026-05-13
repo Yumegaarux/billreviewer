@@ -7,6 +7,7 @@ import Dev from './pages/Dev.jsx';
 import Login from './pages/Login.jsx';
 import Test from './pages/Test.jsx';
 import Details from './pages/Details.jsx';
+import RegisterPage from './pages/Register.jsx';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/test" element={<Test />} />
             <Route path="/details/:id" element={<Details />}/>
+            <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </main>
     </>

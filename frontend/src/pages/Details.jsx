@@ -174,7 +174,7 @@ export default function Details() {
 
                             <button
                                 type="submit"
-                                className="bg-blue-500 text-white text-sm px-4 py-2 rounded-sm hover:bg-blue-600 cursor-pointer"
+                                className="bg-blue-500 text-white text-sm px-4 py-2 rounded-sm hover:bg-blue-600 ease-in-out duration-300 cursor-pointer"
                                 onClick={handleSubmit}
                             >
                                 Submit

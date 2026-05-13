@@ -97,7 +97,7 @@ export default function BillSummary({ bill }) {
           onClick={generate}
           disabled={loading | generated}
           className="bg-blue-500 text-white text-sm px-4 py-2 rounded-md cursor-pointer
-                    hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed justify-end mt-auto" 
+                    hover:bg-blue-600 ease-in-out duration-300 disabled:bg-blue-300 disabled:cursor-not-allowed justify-end mt-auto" 
         >
           {loading ? "Generating..." : "Explain this bill"}
         </button>

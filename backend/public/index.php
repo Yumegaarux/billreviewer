@@ -57,16 +57,21 @@ error_log("Endpoint: $endpoint, ID: $id");
 file_put_contents('debug.log', 
     "URI: $requestUri | Script: $scriptName | Endpoint: $endpoint | ID: $id\n", 
     FILE_APPEND);
+
 try {
     switch($endpoint) {
-        case 'bills': {
+        case 'bills' : {
             handleBills($method);
             break;
         }
-        case 'comment':{
+        case 'comment' : {
             handleComments($method, $id);
             break;
         }  
+        case 'users' : {
+            handleUsers($method, $id);
+            break;
+        }
     }
 } catch (Exception $e) {
     http_response_code(500);
@@ -128,6 +133,28 @@ function handleComments($method, $id){
             } else {
                 echo json_encode([]);
             }
+        }
+    }
+}
+
+function handleUsers($method, $id){ 
+    $userModel = new User();
+
+    switch($method){
+        case 'GET': {
+            if($id){
+                $user = $userModel->getUserById($id);
+                echo json_encode($user);
+            } else {
+                $users = $userModel->getAllUsers();
+                echo json_encode($users);
+            }
+        }
+        
+        case 'POST': {
+            $data = json_decode(file_get_contents('php://input'), true);
+            $user = $userModel->createUser($data);
+            echo json_encode($user);
         }
     }
 }

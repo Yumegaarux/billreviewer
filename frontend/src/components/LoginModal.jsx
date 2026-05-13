@@ -13,10 +13,10 @@ export default function LoginModal( { onClose } ) {
             setIsClosing(false);
         }, 300);
     };
-    
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity/50 backdrop-blur-sm z-50" onClick={onClose}>
-            <div className={`animate-slide-in flex flex-col min-w-96 p-12 bg-white rounded-lg shadow-lg border border-gray-300 ${isClosing ? 'animate-slide-out' : ''}`} onClick={(e) => e.stopPropagation()}>
+            <div className={`animate-slide-in flex flex-col min-w-96 p-12 bg-white rounded-lg shadow-lg border border-gray-300 ${ isClosing ? 'animate-slide-out' : ''}`} onClick={(e) => e.stopPropagation()}>
                 <X className="self-end cursor-pointer" onClick={handleClose} />
                 <div className="text-2xl font-bold mb-4 text-center">Login</div>
                 <div className="text-gray-400 mb-4 text-center">It seems you're not logged in.</div>

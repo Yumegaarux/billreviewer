@@ -1,5 +1,7 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { API_ENDPOINTS, API_BASE_URL } from "../../util/api";
+
 
 export default function RegisterPage() {
     const [username, setUsername] = useState("");
@@ -9,9 +11,17 @@ export default function RegisterPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [usernameError, setUsernameError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
+
+    const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
+    const [emailErrorMessage, setEmailErrorMessage] = useState("");
+
+    const [canSubmit, setCanSubmit] = useState(false);
+
     const handleRegister = () => {
         try {
-            const res = axios.post("/api/user", {
+            const res = axios.post(API_BASE_URL + API_ENDPOINTS.USERS, {
                 username,
                 firstName,
                 lastName,
@@ -23,6 +33,59 @@ export default function RegisterPage() {
             console.error("Error registering user:", error);
         }
     }
+
+    const checkDuplicate = async (field, value) => {
+        try {
+            const res = await axios.post(API_BASE_URL + API_ENDPOINTS.USERS, {
+                action: "check-duplicate", // This is the action field
+                field: field,      // This is the field to check
+                value: value       // This is the value to check
+            });
+            console.log('res:', res.data);
+            return res.data.exists;
+            
+        } catch (error) {
+            console.error(`Error checking ${field}:`, error);
+            return false;
+        }
+    }
+
+    const handleUsernameChange = async (e) => {
+        const value = e.target.value;
+        setUsername(value);
+
+        const exists = await checkDuplicate('username', value);
+        setUsernameError(exists); 
+
+        handleErrorMessage('username', e.target.value);
+        
+        e == "" ? setUsernameErrorMessage("Username is required") : null;
+    };
+
+    const handleEmailChange = async (e) => {
+        const value = e.target.value;
+        setEmail(value);
+
+        const exists = await checkDuplicate('email', value);
+        setEmailError(exists); 
+
+        e == "" ? setEmailErrorMessage("Email is required") : null;
+    };
+
+    useEffect(() => {
+        if (
+            username &&
+            !usernameError &&
+            email &&
+            !emailError &&
+            password &&
+            occupation
+        ) {
+            setCanSubmit(true);
+        } else {
+            setCanSubmit(false);
+        }
+    }, [username, usernameError, email, emailError, password, occupation]);
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -54,21 +117,21 @@ export default function RegisterPage() {
                         <input
                             type="text" 
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            onChange={(e) => handleUsernameChange(e)}
+                            className={"w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 " + (usernameError ? "focus:ring-red-500 border-red-500" : "focus:ring-blue-300")}
                         />
                     </div>
-
+                    {usernameError && <p className="text-red-500 text-sm">Username already exists</p>}
                     <div className="mb-4">
                         <label className="block text-gray-700">Email</label>
                         <input
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            onChange={(e) => handleEmailChange(e)}
+                            className={"w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 " + (emailError ? "focus:ring-red-500 border-red-500" : "focus:ring-blue-300")}
                         />
                     </div>
-                    
+                    {emailError && <p className="text-red-500 text-sm">Email already exists</p>}
                     <div className="mb-4">
                         <label className="block text-gray-700">Password</label>
                         <input
@@ -97,15 +160,20 @@ export default function RegisterPage() {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 ease-in-out duration-300 cursor-pointer"
+                        className={`w-full py-2 px-4 rounded-lg ease-in-out duration-300 ${
+                            canSubmit
+                                ? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+                                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                         onClick={() => handleRegister()}
+                        disabled={!canSubmit}
                     >
                         Register
                     </button>
                 </form>
                 <p className="mt-4 text-center">
                     Already have an account?{" "}
-                    <a href="/login" className="text-blue-500 hover:underline">
+                    <a href="/login" className="text-blue-500 hover:underline " >
                         Login here
                     </a>
                 </p>

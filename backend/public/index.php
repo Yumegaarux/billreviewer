@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require_once __DIR__ . '/../bootstrap/app.php';
 
 use billreview\backend\models\Comment;
+use billreview\backend\models\User;
 
 // Handle preflight OPTIONS requests
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -153,8 +154,10 @@ function handleUsers($method, $id){
         
         case 'POST': {
             $data = json_decode(file_get_contents('php://input'), true);
-            $user = $userModel->createUser($data);
-            echo json_encode($user);
+            if ($data['action'] === 'check-duplicate') {
+                $exists = $userModel->checkDuplicate($data['field'], $data['value']);
+                echo json_encode(['exists' => !empty($exists)]);
+            }
         }
     }
 }

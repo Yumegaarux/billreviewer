@@ -37,9 +37,9 @@ export default function RegisterPage() {
     const checkDuplicate = async (field, value) => {
         try {
             const res = await axios.post(API_BASE_URL + API_ENDPOINTS.USERS, {
-                action: "check-duplicate", // This is the action field
-                field: field,      // This is the field to check
-                value: value       // This is the value to check
+                action: "check-duplicate", // parameters than can be passed around.
+                field: field,      
+                value: value       
             });
             console.log('res:', res.data);
             return res.data.exists;

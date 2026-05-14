@@ -58,6 +58,8 @@ CREATE TABLE `users` (
   `date_joined` date DEFAULT NULL,
   `usertype_id` int DEFAULT NULL,
   `password` varchar(30) DEFAULT NULL,
+  `username` varchar(20) NOT NULL,
+  `email` varchar(100) NOT NULL,
   PRIMARY KEY (`user_id`),
   KEY `usertype_id` (`usertype_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`usertype_id`) REFERENCES `usertype` (`usertype_id`)
@@ -70,7 +72,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Juan','Dela Cruz','2025-01-15',2,NULL),(2,'Maria','Santos','2025-02-20',2,NULL),(3,'Pedro','Reyes','2025-03-10',2,NULL),(4,'Admin','User','2025-01-01',1,NULL);
+INSERT INTO `users` VALUES (1,'Juan','Dela Cruz','2025-01-15',2,NULL,'MrMan',''),(2,'Maria','Santos','2025-02-20',2,NULL,'Maria24',''),(3,'Pedro','Reyes','2025-03-10',2,NULL,'',''),(4,'Admin','User','2025-01-01',1,NULL,'','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,4 +109,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-13  8:22:24
+-- Dump completed on 2026-05-14  8:11:21

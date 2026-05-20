@@ -24,7 +24,7 @@ export default function RegisterPage() {
             const res = axios.post(API_BASE_URL + API_ENDPOINTS.USERS, {
                 username,
                 firstName,
-                lastName,
+                lastName,      
                 occupation,
                 email,
                 password
@@ -54,12 +54,15 @@ export default function RegisterPage() {
         const value = e.target.value;
         setUsername(value);
 
-        const exists = await checkDuplicate('username', value);
-        setUsernameError(exists); 
+        if (value === "") {
+            setUsernameError(true);
+            setUsernameErrorMessage("Username is required");
+            return;
+        }
 
-        handleErrorMessage('username', e.target.value);
-        
-        e == "" ? setUsernameErrorMessage("Username is required") : null;
+        const exists = await checkDuplicate("username", value);
+        setUsernameError(exists);
+        setUsernameErrorMessage(exists ? "Username already exists" : "");
     };
 
     const handleEmailChange = async (e) => {
@@ -121,7 +124,7 @@ export default function RegisterPage() {
                             className={"w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 " + (usernameError ? "focus:ring-red-500 border-red-500" : "focus:ring-blue-300")}
                         />
                     </div>
-                    {usernameError && <p className="text-red-500 text-sm">Username already exists</p>}
+                    {usernameError && <p className="text-red-500 text-sm">{usernameErrorMessage}</p>}
                     <div className="mb-4">
                         <label className="block text-gray-700">Email</label>
                         <input
@@ -131,7 +134,7 @@ export default function RegisterPage() {
                             className={"w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 " + (emailError ? "focus:ring-red-500 border-red-500" : "focus:ring-blue-300")}
                         />
                     </div>
-                    {emailError && <p className="text-red-500 text-sm">Email already exists</p>}
+                    {emailError && <p className="text-red-500 text-sm">{emailErrorMessage}</p>}
                     <div className="mb-4">
                         <label className="block text-gray-700">Password</label>
                         <input
@@ -140,6 +143,16 @@ export default function RegisterPage() {
                             onChange={(e) => setPassword(e.target.value)}   
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"  
                         />
+
+                        {password && (
+                            <div>
+                                <p className="text-gray-500 text-sm">- Password must be at least 6 characters long</p>
+                                <p className="text-gray-500 text-sm">- Password must contain at least one uppercase letter, one lowercase letter, and one number</p>
+                                <p className="text-gray-500 text-sm">- Password must not contain any spaces</p>
+                                <p className="text-gray-500 text-sm">- Password must not contain any special characters</p>
+                            </div>
+                        )}
+
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Occupation</label>

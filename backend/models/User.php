@@ -12,9 +12,8 @@ class User extends BaseModel {
         return $this->db->fetchAll($query, ['value' => $value]);
     }
 
-    public function createAccount(array $userData) {
+    public function createUser(array $userData) {
         $userData['password'] = password_hash($userData['password'], PASSWORD_BCRYPT);
-        
         $userData['date_joined'] = date('Y-m-d');
         $userData['usertype_id'] = 2;  // default to regular user
 

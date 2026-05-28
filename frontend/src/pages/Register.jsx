@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { API_ENDPOINTS, API_BASE_URL } from "../../util/api";
+import toast from 'react-hot-toast';
 
 
 export default function RegisterPage() {
@@ -19,9 +20,11 @@ export default function RegisterPage() {
 
     const [canSubmit, setCanSubmit] = useState(false);
 
-    const handleRegister = () => {
+    const handleRegister = async (e) => {
+        e.preventDefault();
         try {
-            const res = axios.post(API_BASE_URL + API_ENDPOINTS.USERS, {
+            const res = await axios.post(API_BASE_URL + API_ENDPOINTS.USERS, {
+                action: 'register',
                 username,
                 firstName,
                 lastName,      
@@ -29,8 +32,9 @@ export default function RegisterPage() {
                 email,
                 password
             });
+            toast.success('Account created!');
         } catch (error) {
-            console.error("Error registering user:", error);
+            toast.error(error.response?.data?.error || 'Registration failed');
         }
     }
 
@@ -69,10 +73,15 @@ export default function RegisterPage() {
         const value = e.target.value;
         setEmail(value);
 
-        const exists = await checkDuplicate('email', value);
-        setEmailError(exists); 
+        if (value === "") {
+            setEmailError(true);
+            setEmailErrorMessage("Email is required");
+            return;
+        }
 
-        e == "" ? setEmailErrorMessage("Email is required") : null;
+        const exists = await checkDuplicate("email", value);
+        setEmailError(exists);
+        setEmailErrorMessage(exists ? "Email already exists" : "");
     };
 
     useEffect(() => {
@@ -162,12 +171,18 @@ export default function RegisterPage() {
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                         >
                             <option value="">Select Occupation</option>
-                            <option value="engineer">Engineer</option>
-                            <option value="teacher">Teacher</option>
-                            <option value="doctor">Doctor</option>
-                            <option value="lawyer">Lawyer</option>
-                            <option value="IT">Information Technologist</option>
-                            <option value="student">Student</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Teacher</option>
+                            <option value="3">Doctor</option>
+                            <option value="4">Lawyer</option>
+                            <option value="5">Information Technologist</option>
+                            <option value="6">Electrical Engineer</option>
+                            <option value="7">Civil Engineer</option>
+                            <option value="8">Electronics Engineer</option>
+                            <option value="9">Mechanical Engineer</option>
+                            <option value="10">Architect</option>
+                            <option value="11">Nurse</option>
+                            <option value="12">Student</option>
                         </select>
                     </div>
 
@@ -178,7 +193,7 @@ export default function RegisterPage() {
                                 ? "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
                                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
-                        onClick={() => handleRegister()}
+                        onClick={handleRegister}
                         disabled={!canSubmit}
                     >
                         Register

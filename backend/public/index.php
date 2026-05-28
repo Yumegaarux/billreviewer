@@ -158,6 +158,24 @@ function handleUsers($method, $id){
                 $exists = $userModel->checkDuplicate($data['field'], $data['value']);
                 echo json_encode(['exists' => !empty($exists)]);
             }
+            else if ($data['action'] === 'register') {
+                try {
+                    $userId = $userModel->createUser([
+                        'username' => $data['username'],
+                        'fname'    => $data['firstName'],
+                        'lname'    => $data['lastName'],
+                        'email'    => $data['email'],
+                        'password' => $data['password'],
+                        'usertype_id' => $data['occupation']
+                    ]);
+                    
+                    http_response_code(201);
+                    echo json_encode(['success' => true, 'user_id' => $userId]);
+                } catch (Exception $e) {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+                }
+            }
         }
     }
 }

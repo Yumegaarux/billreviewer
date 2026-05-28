@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+
 import './App.css';
 import Header from './components/Header.jsx';
 import Sidebar from './components/Sidebar.jsx';
@@ -13,6 +15,7 @@ function App() {
 
   return (
     <>
+        <Toaster position='top-right'></Toaster>
         <Sidebar></Sidebar>
         <Header></Header>
         

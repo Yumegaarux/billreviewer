@@ -73,6 +73,10 @@ try {
             handleUsers($method, $id);
             break;
         }
+        case 'auth' : {
+            handleAuth($method);
+            break;
+        }
     }
 } catch (Exception $e) {
     http_response_code(500);
@@ -137,27 +141,17 @@ function handleComments($method, $id){
         }
     }
 }
-
-function handleUsers($method, $id){ 
+function handleAuth($method) {
     $userModel = new User();
 
-    switch($method){
-        case 'GET': {
-            if($id){
-                $user = $userModel->getUserById($id);
-                echo json_encode($user);
-            } else {
-                $users = $userModel->getAllUsers();
-                echo json_encode($users);
-            }
-        }
-        
+    switch($method) {
         case 'POST': {
             $data = json_decode(file_get_contents('php://input'), true);
             if ($data['action'] === 'check-duplicate') {
                 $exists = $userModel->checkDuplicate($data['field'], $data['value']);
                 echo json_encode(['exists' => !empty($exists)]);
             }
+            
             else if ($data['action'] === 'register') {
                 try {
                     $userId = $userModel->createUser([
@@ -176,6 +170,36 @@ function handleUsers($method, $id){
                     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
                 }
             }
+
+            if ($data['action'] === 'login') {
+                $user = $userModel->login($data['username'], $data['password']);
+                if ($user) {
+                    echo json_encode(['success' => true, 'user' => $user]);
+                } else {
+                    http_response_code(401);
+                    echo json_encode(['success' => false, 'error' => 'Invalid credentials']);
+                }
+            }
+            break;
+        }
+    }
+}
+
+function handleUsers($method, $id){ 
+    $userModel = new User();
+
+    switch($method){
+        case 'GET': {
+            if($id){
+                $user = $userModel->getUserById($id);
+                echo json_encode($user);
+            } else {
+
+            }
+        }
+        
+        case 'POST': {
+            $data = json_decode(file_get_contents('php://input'), true);
         }
     }
 }

@@ -23,7 +23,7 @@ export default function RegisterPage() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(API_BASE_URL + API_ENDPOINTS.USERS, {
+            const res = await axios.post(API_BASE_URL + API_ENDPOINTS.AUTH, {
                 action: 'register',
                 username,
                 firstName,

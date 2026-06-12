@@ -17,7 +17,16 @@ class User extends BaseModel {
         $userData['date_joined'] = date('Y-m-d');
         $userData['usertype_id'] = 2;  // default to regular user
 
-
         return $this->create($userData);
+    }
+
+    public function login($username, $password) {
+        $query = "SELECT * FROM {$this->table} WHERE username = :username";
+        $user = $this->db->fetch($query, ['username' => $username]);
+
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
+        return false;
     }
 }

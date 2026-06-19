@@ -23,4 +23,9 @@ class Comment extends BaseModel {
 
         return $this->db->fetchAll($query, ['bill_id' => $billID]);
     }
+
+    public function createComment(array $commentData) {
+        return $this->create($commentData);
+    }
+
 }

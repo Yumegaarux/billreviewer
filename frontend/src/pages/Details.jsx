@@ -36,6 +36,7 @@ export default function Details() {
             return res.data;
             console.log(`${API_BASE_URL}${API_ENDPOINTS.COMMENTS}/${billid}`);
             console.log(res);
+            console.log("Data received: ", res.data);
         } catch (err) {
             console.error(err);
             return [];
@@ -55,7 +56,12 @@ export default function Details() {
     };
 
     const handleRating = (rating) => {
-        setSelectedRating(rating);
+        if (!isLoggedIn) {
+            setShowLoginModal(true);
+            return;
+        } else {
+            setSelectedRating(rating);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -72,9 +78,21 @@ export default function Details() {
     };
 
     useEffect(() => {
-        handleComments(billNo).then(data => setReviews(data)); 
-    }, [])
+        handleComments(billNo).then(data => setReviews(Array.isArray(data) ? data : [])); 
+        console.log("billNo: ", billNo);
 
+        const checkAuth = async () => {
+            try {
+                const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.AUTH}`, { withCredentials: true });
+                setIsLoggedIn(res.data.isAuthenticated);
+            } catch (err) {
+                console.error(err);
+                setIsLoggedIn(false);
+            }
+        };  
+
+        checkAuth();
+    }, []);
 
     return(
         <div className="flex flex-col">
@@ -110,7 +128,7 @@ export default function Details() {
                 <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                     <h2 className="text-center">Authors:</h2>
                     <div className="flex flex-col gap-2">
-                        {bill.authors.map((author) => {
+                         {bill?.authors?.map((author) => {
                             const fullName = `${author.last_name}, ${author.first_name}`;
                             return (
                                 <div key={author.id} className="flex items-center justify-start gap-2 w-52 h-10 mt-2 border-gray-200">
@@ -125,7 +143,7 @@ export default function Details() {
 
             <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                 <h1>Bill Reviews</h1>
-                {reviews.map((review) => {
+                {reviews && reviews.map((review) => {
                     return(
                         <div className="flex flex-col m-1.5 bg-white border border-gray-200 rounded-md p-2 px-5">
                             <div className="flex flex-row gap-2 items-baseline">

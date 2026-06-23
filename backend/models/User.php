@@ -29,4 +29,9 @@ class User extends BaseModel {
         }
         return false;
     }
+
+    public function getUserById($userId) {
+        $query = "SELECT * FROM {$this->table} WHERE user_id = :user_id";
+        return $this->db->fetch($query, ['user_id' => $userId]);
+    }
 }

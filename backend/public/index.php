@@ -140,6 +140,8 @@ function handleComments($method, $id){
             } else {
                 echo json_encode([]);
             }
+
+            break;
         }
         case 'POST': {
             $data = json_decode(file_get_contents('php://input'), true);
@@ -164,13 +166,25 @@ function handleComments($method, $id){
                 http_response_code(400);
                 echo json_encode(['success' => false, 'error' => 'Missing required fields']);
             }
+            
+            break;
         }
     }
 }
 function handleAuth($method) {
     $userModel = new User();
-
+    
     switch($method) {
+        case 'GET': {
+            if (isset($_SESSION['user_id'])) {
+                $user = $userModel->getUserById($_SESSION['user_id']);
+                echo json_encode(['loggedIn' => true, 'user' => $user]);
+            } else {
+                echo json_encode(['loggedIn' => false]);
+            }
+            break;
+        }
+
         case 'POST': {
             $data = json_decode(file_get_contents('php://input'), true);
             if ($data['action'] === 'check-duplicate') {

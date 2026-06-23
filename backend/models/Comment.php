@@ -6,14 +6,6 @@ class Comment extends BaseModel {
     protected $table = 'reviews';
     protected $primaryKey = 'id';
 
-    protected $fillable = [
-        'bill_id',
-        'user_id',
-        'body',
-        'created_at',
-        'rating'
-    ];
-
     public function getBillCommentsWithUser($billID) {
         $query = "SELECT r.*, u.fname, u.lname 
                   FROM reviews r
@@ -27,5 +19,4 @@ class Comment extends BaseModel {
     public function createComment(array $commentData) {
         return $this->create($commentData);
     }
-
 }

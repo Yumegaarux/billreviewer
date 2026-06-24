@@ -15,6 +15,7 @@ The system aims to simulate how an ordinary citizen might review legislation, al
 * **Rating** – Rate bills and see aggregated public ratings.
 * **API Integration** – Fetches bills and handles interactions in real-time.
 * **Random Access Simulation** – Users experience bill reviews as a regular citizen.
+* **AI Bill Summarizer** – AI can summarize and provide more details regarding the bill.
 
 ---
 

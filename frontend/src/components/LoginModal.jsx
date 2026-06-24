@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import { API_ENDPOINTS, API_BASE_URL } from "../../util/api";
 import axios from "axios";
 import toast from 'react-hot-toast';
+import { NavLink } from "react-router-dom";
 
 export default function LoginModal( { onClose, onLogin } ) {
     const [username, setUsername] = useState("");
@@ -13,6 +14,7 @@ export default function LoginModal( { onClose, onLogin } ) {
     const handleClose = () => {
         setIsClosing(true);
         setTimeout(() => {
+            onLogin();
             onClose();
             setIsClosing(false);
         }, 300);
@@ -25,9 +27,10 @@ export default function LoginModal( { onClose, onLogin } ) {
                 action: 'login',
                 username,
                 password
-            });
+            }, { withCredentials: true });
             if (res.data.success) {
                 toast.success('Login successful!, Welcome back ' + res.data.user.username);
+                onLogin();
                 onClose();
             }
         } catch (error) {

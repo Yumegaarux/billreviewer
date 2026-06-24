@@ -166,7 +166,7 @@ function handleComments($method, $id){
                 http_response_code(400);
                 echo json_encode(['success' => false, 'error' => 'Missing required fields']);
             }
-            
+
             break;
         }
     }
@@ -178,9 +178,9 @@ function handleAuth($method) {
         case 'GET': {
             if (isset($_SESSION['user_id'])) {
                 $user = $userModel->getUserById($_SESSION['user_id']);
-                echo json_encode(['loggedIn' => true, 'user' => $user]);
+                echo json_encode(['authenticated' => true, 'user' => $user]);
             } else {
-                echo json_encode(['loggedIn' => false]);
+                echo json_encode(['authenticated' => false]);
             }
             break;
         }
@@ -211,7 +211,7 @@ function handleAuth($method) {
                 }
             }
 
-            if ($data['action'] === 'login') {
+            else if ($data['action'] === 'login') {
                 $user = $userModel->login($data['username'], $data['password']);
 
                 if ($user) {

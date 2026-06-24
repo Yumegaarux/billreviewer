@@ -28,6 +28,19 @@ export default function Details() {
     const bill = state?.bill;
     const billNo = bill?.name;
 
+    const checkAuth = async () => {
+        try {
+            const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.AUTH}`, { withCredentials: true });
+            setIsLoggedIn(res.data.authenticated);
+            console.log("Authentication check response:", res.data);
+            console.log("User: ", res.data.user);
+            console.log("Check Auth Triggered!");
+        } catch (err) {
+            console.error(err);
+            setIsLoggedIn(false);
+        }
+    };  
+
     const handleComments = async (billid) => {
         try{
             const res = await axios.get(
@@ -80,16 +93,6 @@ export default function Details() {
     useEffect(() => {
         handleComments(billNo).then(data => setReviews(Array.isArray(data) ? data : [])); 
         console.log("billNo: ", billNo);
-
-        const checkAuth = async () => {
-            try {
-                const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.AUTH}`, { withCredentials: true });
-                setIsLoggedIn(res.data.isAuthenticated);
-            } catch (err) {
-                console.error(err);
-                setIsLoggedIn(false);
-            }
-        };  
 
         checkAuth();
     }, []);
@@ -169,6 +172,11 @@ export default function Details() {
                             placeholder="Write your review..."
                             rows={4}
                             className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                            onClick={() => {
+                                if (!isLoggedIn) {
+                                    setShowLoginModal(true);
+                                }
+                            }}
                         />
 
                         <div className="flex flex-row justify-end items-center gap-3.5">
@@ -198,7 +206,10 @@ export default function Details() {
                         </div>
                     </form>
 
-                    {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} onLogin={() => setIsLoggedIn(true)} />}
+                    {showLoginModal && (<LoginModal 
+                                            onClose={() => setShowLoginModal(false)} 
+                                            onLogin={() => checkAuth()}
+                                        />)}
                 </div>
             </div>
         </div>
